@@ -24,20 +24,34 @@ Modern application teams need a reliable and automated way to deploy containeriz
 •	Deploy the updated image to a Kubernetes cluster (Minikube or cloud)
 
 Prerequisites: -
+
 •	Kubernetes cluster (Minikube or  AKS)
+
 •	kubectl configured
+
 •	Container registry credentials (Docker Hub or GHCR)
+
 •	GitHub repository with your app code
 
+
 Test: -
+
 •	Push code to main
+
 •	GitHub Actions will: 
+
 o	Build & push Docker image
+
 o	Apply Kubernetes manifests
 
+
 Outcome: - 
-Fully automated deployment pipeline triggered by code changes. 
-Consistent and secure deployments to Kubernetes. 
+
+Fully automated deployment pipeline triggered by code changes.
+
+Consistent and secure deployments to Kubernetes.
+
 Improved developer productivity and faster time-to-market.
+
 Follow security best practices.
 
