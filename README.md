@@ -8,12 +8,19 @@ Problem Statement: -
 Modern application teams need a reliable and automated way to deploy containerized applications to Kubernetes whenever new code changes are pushed. Manual deployments are error-prone, time-consuming, and lack consistency across environments. Additionally, teams require integration with CI/CD pipelines to ensure:
 
 •	Automated builds and deployments
+
 •	Version-controlled infrastructure
+
 •	Faster release cycles
+
 •	Reduced human intervention
+
 •	Build a Docker image
+
 •	Scan vulnerabilities using SonarQube.
+
 •	Push it to a container registry (e.g., Docker Hub or GitHub Container Registry)
+
 •	Deploy the updated image to a Kubernetes cluster (Minikube or cloud)
 
 Prerequisites: -
