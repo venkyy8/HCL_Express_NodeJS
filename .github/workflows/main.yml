@@ -3,6 +3,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   appointment_microservice:
@@ -48,4 +49,5 @@ jobs:
           file: ./Patient-Service/Dockerfile
           push: true
           tags: |
+
             venkyy82/hcl_hackathon:Patient.${{ github.run_number }}  
