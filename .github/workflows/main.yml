@@ -6,8 +6,21 @@ on:
   workflow_dispatch:
 
 jobs:
+  sonarqube-scan:
+    name: SonarQube Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v7.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   appointment_microservice:
     runs-on: ubuntu-latest
+    needs: sonarqube-scan
 
     steps:
       - name: Checkout code
@@ -31,6 +44,7 @@ jobs:
 
   patient_microservice:
     runs-on: ubuntu-latest
+    needs: sonarqube-scan
 
     steps:
       - name: Checkout code
@@ -49,5 +63,4 @@ jobs:
           file: ./Patient-Service/Dockerfile
           push: true
           tags: |
-
             venkyy82/hcl_hackathon:Patient.${{ github.run_number }}  
