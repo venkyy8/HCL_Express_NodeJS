@@ -27,3 +27,17 @@ jobs:
         with:
           name: Depcheck report
           path: ${{github.workspace}}/reports
+  trivy_scan_fs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Run Trivy vulnerability scan on filesystem
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          format: "table"
+          exit-code: 1
+          ignore-unfixed: true
+          severity: "CRITICAL,HIGH"
