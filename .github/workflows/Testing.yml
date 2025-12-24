@@ -89,13 +89,8 @@ jobs:
           exit-code: '0' # pass the job if vulnerabilities are found
           ignore-unfixed: true # Optional: Ignore unfixed vulnerabilities
       
-      - name: push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          # context: .
-          # file: ./Dockerfile
-          push: true # Push the image
-          tags: venkyy82/hcl_hackathon:Appointment.${{ github.run_number }}
+      - name: Push the image to Docker Hub
+        run: docker push venkyy82/hcl_hackathon:Appointment.${{ github.run_number }}
 
 
   DockerBuild-Patient_microservice:
@@ -129,12 +124,7 @@ jobs:
           exit-code: '0' # Pass the job if vulnerabilities are found
           ignore-unfixed: true # Optional: Ignore unfixed vulnerabilities
       
-      - name: push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          # context: .
-          # file: ./Dockerfile
-          push: true # Push the image
-          tags: venkyy82/hcl_hackathon:Patient.${{ github.run_number }}
+      - name: Push the image to Docker Hub
+        run: docker push venkyy82/hcl_hackathon:Patient.${{ github.run_number }}
 
   
