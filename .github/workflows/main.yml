@@ -18,7 +18,6 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-		  
   appointment_microservice:
     runs-on: ubuntu-latest
     needs: sonarqube-scan
@@ -67,3 +66,4 @@ jobs:
             venkyy82/hcl_hackathon:Patient.${{ github.run_number }}  
 			
 			
+
