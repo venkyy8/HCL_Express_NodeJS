@@ -63,7 +63,4 @@ jobs:
           file: ./Patient-Service/Dockerfile
           push: true
           tags: |
-            venkyy82/hcl_hackathon:Patient.${{ github.run_number }}  
-			
-			
-
+            venkyy82/hcl_hackathon:Patient.${{ github.run_number }}
