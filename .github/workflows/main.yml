@@ -6,6 +6,43 @@ on:
   workflow_dispatch:
 
 jobs:
+  OWASP-Dependency-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: OWASP Dependency-Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'MyProject'
+          path: '.'
+          format: 'HTML'
+          args: >
+            --failOnCVSS 7
+            --enableRetired
+
+      - name: Upload Scan Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: Depcheck report
+          path: ${{github.workspace}}/reports
+          
+  trivy_scan_fs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Run Trivy vulnerability scan on filesystem
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          format: "table"
+          exit-code: 1
+          ignore-unfixed: true
+          severity: "CRITICAL,HIGH"
+
   sonarqube-scan:
     name: SonarQube Scan
     runs-on: ubuntu-latest
@@ -18,7 +55,8 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  appointment_microservice:
+
+  DockerBuild-Appointment_microservice:
     runs-on: ubuntu-latest
     needs: sonarqube-scan
 
@@ -42,7 +80,7 @@ jobs:
             venkyy82/hcl_hackathon:Appointment.${{ github.run_number }}
 
 
-  patient_microservice:
+  DockerBuild-Patient_microservice:
     runs-on: ubuntu-latest
     needs: sonarqube-scan
 
@@ -65,3 +103,4 @@ jobs:
           tags: |
             venkyy82/hcl_hackathon:Patient.${{ github.run_number }}
 
+  
