@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: CI_Testing
 
 on:
   # push:
@@ -82,7 +82,7 @@ jobs:
             venkyy82/hcl_hackathon:Appointment.${{ github.run_number }}
 
       - name: Run Trivy image scan
-        uses: aquasecurity/trivy-action@v0.33.1
+        uses: aquasecurity/trivy-action@main
         with:
           image-ref: 'venkyy82/hcl_hackathon:Appointment.${{ github.run_number }}' # Scan the locally loaded image
           format: 'table'
@@ -122,7 +122,7 @@ jobs:
             venkyy82/hcl_hackathon:Patient.${{ github.run_number }}
 
       - name: Run Trivy image scan
-        uses: aquasecurity/trivy-action@v0.33.1
+        uses: aquasecurity/trivy-action@main
         with:
           image-ref: 'venkyy82/hcl_hackathon:Patient.${{ github.run_number }}' # Scan the locally loaded image
           format: 'table'
