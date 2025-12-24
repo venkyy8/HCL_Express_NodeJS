@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: SonarCloud Scan
 
 on:
   push:
@@ -6,61 +6,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  sonarqube-scan:
-    name: SonarQube Scan
+  sonarcloud:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v7.0.0
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  appointment_microservice:
-    runs-on: ubuntu-latest
-    needs: sonarqube-scan
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./Appointment-Service
-          file: ./Appointment-Service/Dockerfile
-          push: true
-          tags: |
-            venkyy82/hcl_hackathon:Appointment.${{ github.run_number }}
-
-
-  patient_microservice:
-    runs-on: ubuntu-latest
-    needs: sonarqube-scan
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./Patient-Service
-          file: ./Patient-Service/Dockerfile
-          push: true
-          tags: |
-            venkyy82/hcl_hackathon:Patient.${{ github.run_number }}  
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
