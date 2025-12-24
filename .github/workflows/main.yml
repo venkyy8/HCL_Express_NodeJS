@@ -1,8 +1,8 @@
 name: Build and Push Docker Image
 
 on:
-  push:
-    branches: [ "main" ]
+  # push:
+  #   branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -64,3 +64,4 @@ jobs:
           push: true
           tags: |
             venkyy82/hcl_hackathon:Patient.${{ github.run_number }}
+
