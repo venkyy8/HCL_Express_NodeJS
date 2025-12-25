@@ -1,42 +1,36 @@
-name: helmfile
+name: helfile testing
 
 on:
+  # Trigger manually
   workflow_dispatch:
 
 jobs:
-  Deploy_to_AKS:
-    name: Deploy to AKS using Helmfile
+  # The Job to install helmfile, authenticate with Azure, and use it
+  install-helmfile-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install kubectl
-        run: |
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/
-
-      - name: Install Helm
-        run: |
-          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-
+      # Step to install Helmfile via a GitHub Action
       - name: Install Helmfile
-        run: |
-          curl -L -o helmfile https://github.com/helmfile/helmfile/releases/download/v0.157.1/helmfile_linux_amd64
-          file helmfile  # Check the file type
-          chmod +x helmfile
-          sudo mv helmfile /usr/local/bin/helmfile
-          helmfile --version  # Verify that helmfile is installed correctly
+        uses: helmfile/helmfile-action@v0.3.0
 
-
-      - name: Configure AKS credentials
-        uses: azure/aks-set-context@v2
+      # Step to log in to Azure using a Service Principal
+      - name: Azure Login
+        uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          cluster-name: aks-02
-          resource-group: aks-rg
+          creds: ${{ secrets.AZURE_CREDENTIALS }}  # Store your Azure SP credentials in GitHub Secrets
 
-      - name: Deploy microservices using Helmfile
+      # Step to configure kubectl with AKS credentials
+      - name: Set up kubectl with AKS credentials
+        run: |
+          az aks get-credentials --resource-group aks-rg --name aks-02
+
+      # Step to run helmfile apply (deploying Helm charts)
+      - name: Apply helmfile
         run: |
           helmfile apply
+          sleep 60
+          kubectl get pods
