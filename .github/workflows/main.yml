@@ -1,42 +1,45 @@
 name: Helmfile-testing
 
 on:
-  # Trigger manually
   workflow_dispatch:
 
 jobs:
-  # The Job to install helmfile, authenticate with Azure, and use it
   install-helmfile-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-          
+
+      - name: Install Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+          helm version
+
       - name: Install Helmfile
         run: |
           curl -LO https://github.com/roboll/helmfile/releases/download/v0.135.0/helmfile_linux_amd64
           mv helmfile_linux_amd64 helmfile
-          chmod 777 helmfile
+          chmod +x helmfile
           sudo mv helmfile /usr/local/bin
           helmfile --version
 
-      # Step to log in to Azure using a Service Principal
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}  # Store your Azure SP credentials in GitHub Secrets
-
-      # Step to configure kubectl with AKS credentials
-      - name: Set up kubectl with AKS credentials
+      - name: Install Helm-diff plugin
         run: |
-          az aks get-credentials --resource-group aks-rg --name aks-02
+          helm plugin install https://github.com/databus23/helm-diff
+          helm plugin list
 
-      # Step to run helmfile apply (deploying Helm charts)
-      - name: Apply helmfile
+      - name: Configure kubeconfig
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.EC2_KUBECONFIG }}
+        run: |
+          mkdir -p $HOME/.kube
+          echo "$KUBE_CONFIG_DATA" | base64 --decode > $HOME/.kube/config
+          kubectl get nodes  # optional: verify connection
+
+      - name: Deploy with Helmfile
         run: |
           helmfile -f Deployment/helmfile.yaml apply
           sleep 60
           kubectl get pods
-
-
+          kubectl get svc
