@@ -1,4 +1,4 @@
-name: helfile testing
+name: Helmfile-testing
 
 on:
   # Trigger manually
@@ -13,9 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step to install Helmfile via a GitHub Action
+      # Step to install Helmfile manually
       - name: Install Helmfile
-        uses: helmfile/helmfile-action@v0.3.0
+        run: |
+          curl -L -o helmfile https://github.com/helmfile/helmfile/releases/download/v0.157.1/helmfile_linux_amd64
+          chmod +x helmfile
+          sudo mv helmfile /usr/local/bin/helmfile
+          helmfile --version
 
       # Step to log in to Azure using a Service Principal
       - name: Azure Login
