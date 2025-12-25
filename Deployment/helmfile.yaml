@@ -1,6 +1,11 @@
 releases:
   - name: appointment-service
     chart: ./charts/appointment-service
+    values:
+      - ./charts/appointment-service/values.yaml
   - name: patient-service
     chart: ./charts/patient-service
+    values:
+      - ./charts/appointment-service/values.yaml
+
 
