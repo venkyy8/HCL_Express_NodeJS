@@ -12,13 +12,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      # Step to install Helmfile manually
+          
       - name: Install Helmfile
         run: |
-          curl -L -o helmfile https://github.com/helmfile/helmfile/releases/download/v0.157.1/helmfile_linux_amd64
-          chmod +x helmfile
-          sudo mv helmfile /usr/local/bin/helmfile
+          curl -LO https://github.com/roboll/helmfile/releases/download/v0.135.0/helmfile_linux_amd64
+          mv helmfile_linux_amd64 helmfile
+          chmod 777 helmfile
+          sudo mv helmfile /usr/local/bin
           helmfile --version
 
       # Step to log in to Azure using a Service Principal
@@ -38,3 +38,4 @@ jobs:
           helmfile apply
           sleep 60
           kubectl get pods
+
