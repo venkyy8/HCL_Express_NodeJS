@@ -1,7 +1,6 @@
 releases:
   - name: appointment-service
-    namespace: hcl
     chart: ./charts/appointment-service
   - name: patient-service
-    namespace: hcl
     chart: ./charts/patient-service
+
