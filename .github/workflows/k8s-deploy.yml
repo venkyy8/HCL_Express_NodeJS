@@ -1,4 +1,4 @@
-name: Deploy nginx to AKS
+name: Deploy nginx to AKS using Service Principle
 
 on:
   # push:
@@ -37,6 +37,7 @@ jobs:
       # 5️⃣ Run nginx
       - name: Run nginx pod
         run: |
+          kubectl delete pod nginx --ignore-not-found
           kubectl run nginx --image=nginx
           echo "Waiting 1 minute for pod to start..."
           sleep 60
