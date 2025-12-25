@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "appointment-service.fullname" . }}
+  labels:
+    {{- include "appointment-service.labels" . | nindent 4 }}
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: {{ include "appointment-service.name" . }}

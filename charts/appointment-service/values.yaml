@@ -1,0 +1,14 @@
+replicaCount: 1
+
+image:
+  repository: venkyy82/hcl_hackathon
+  tag: "Appointment.${{ github.run_number }}"
+  pullPolicy: IfNotPresent
+
+service:
+  name: appointment-service
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
