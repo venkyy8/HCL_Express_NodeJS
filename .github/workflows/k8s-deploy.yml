@@ -1,9 +1,10 @@
 name: Deploy nginx to AKS
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -37,4 +38,6 @@ jobs:
       - name: Run nginx pod
         run: |
           kubectl run nginx --image=nginx
+          echo "Waiting 1 minute for pod to start..."
+          sleep 60
           kubectl get pods
