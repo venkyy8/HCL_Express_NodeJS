@@ -2,13 +2,11 @@ replicaCount: 1
 
 image:
   repository: venkyy82/hcl_hackathon
-  tag: "Patient.${{ github.run_number }}"
+  tag: "Patient.9"
   pullPolicy: IfNotPresent
 
 service:
-  name: patient-service
-  type: ClusterIP
+  type: LoadBalancer
   port: 80
+  targetPort: 3001
 
-ingress:
-  enabled: false

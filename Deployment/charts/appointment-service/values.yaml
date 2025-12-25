@@ -1,0 +1,12 @@
+replicaCount: 1
+
+image:
+  repository: venkyy82/hcl_hackathon
+  tag: "Appointment.9"
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 3001
+
