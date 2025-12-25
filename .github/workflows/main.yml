@@ -35,7 +35,8 @@ jobs:
       # Step to run helmfile apply (deploying Helm charts)
       - name: Apply helmfile
         run: |
-          helmfile apply
+          helmfile -f Deployment/helmfile.yaml apply
           sleep 60
           kubectl get pods
+
 
