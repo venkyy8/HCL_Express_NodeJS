@@ -1,33 +1,39 @@
-name: Run Nginx with kubectl
+name: Deploy nginx to AKS
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  kubectl:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repository (required by GitHub Actions)
-      - name: Checkout code
+      # 1️⃣ Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Install kubectl
+      # 2️⃣ Login to Azure
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # 3️⃣ Set AKS context
+      - name: Set AKS context
+        uses: azure/aks-set-context@v4
+        with:
+          resource-group: aks-rg
+          cluster-name: k8s-githubworkflow-CICD
+
+      # 4️⃣ Install kubectl (if not already installed)
       - name: Install kubectl
         uses: azure/setup-kubectl@v4
         with:
           version: 'latest'
 
-      # 3. Set up kubeconfig
-      - name: Configure kubeconfig
-        run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG_DATA }}" | base64 --decode > $HOME/.kube/config
-
-      # 4. Run nginx using kubectl
+      # 5️⃣ Run nginx
       - name: Run nginx pod
         run: |
           kubectl run nginx --image=nginx
