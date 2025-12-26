@@ -170,6 +170,13 @@ jobs:
           helm plugin install https://github.com/databus23/helm-diff
           helm plugin list
 
+      - name: Create / Update Docker Registry Secret
+        run: |
+          kubectl create secret docker-registry regcred \
+            --docker-username=${{ secrets.DOCKER_USERNAME }} \
+            --docker-password='${{ secrets.DOCKER_TOKEN }}' \
+            --dry-run=client -o yaml | kubectl apply -f -
+
       - name: Deploy with Helmfile
         run: |
           # kubectl delete deploy appointment-service patient-service --wait=true
