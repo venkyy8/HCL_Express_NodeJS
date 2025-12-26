@@ -4,6 +4,11 @@ on:
   # push:
   #   branches: [ "main" ]
   workflow_dispatch:
+  #
+  workflow_run:
+    workflows: ["Terraform AKS"]
+    types:
+      - completed
 
 jobs:
   OWASP-Dependency-scan:
@@ -147,10 +152,9 @@ jobs:
       - name: Set AKS Context
         run: |
           az aks get-credentials \
-            --resource-group aks-rg \
-            --name aks-03 \
+            --resource-group rg-aks-demo \
+            --name aks-demo-cluster \
             --overwrite-existing
-
           kubectl get nodes
 
       - name: Install Helm
