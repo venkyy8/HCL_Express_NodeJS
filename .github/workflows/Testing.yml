@@ -1,4 +1,4 @@
-name: CI_Testing
+name: CI/CD E2E Piepeline
 
 on:
   # push:
