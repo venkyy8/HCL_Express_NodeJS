@@ -6,6 +6,7 @@ releases:
   - name: patient-service
     chart: ./charts/patient-service
     values:
-      - ./charts/appointment-service/values.yaml
+      - ./charts/patient-service/values.yaml
+
 
 
