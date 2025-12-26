@@ -1,4 +1,4 @@
-name: CI/CD E2E Piepeline
+name: Azure_CI/CD E2E Piepeline
 
 on:
   # push:
