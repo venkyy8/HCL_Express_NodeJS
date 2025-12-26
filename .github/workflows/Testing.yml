@@ -127,4 +127,56 @@ jobs:
       - name: Push the image to Docker Hub
         run: docker push venkyy82/hcl_hackathon:Patient.${{ github.run_number }}
 
+  Deployment:
+    runs-on: ubuntu-latest
+    needs: 
+      - DockerBuild-Patient_microservice
+      - DockerBuild-Appointment_microservice
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Login to Azure using Service Principal
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Set AKS kubeconfig
+      - name: Set AKS Context
+        run: |
+          az aks get-credentials \
+            --resource-group aks-rg \
+            --name aks-03 \
+            --overwrite-existing
+
+          kubectl get nodes
+
+      - name: Install Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+          helm version
+
+      - name: Install Helmfile
+        run: |
+          curl -LO https://github.com/roboll/helmfile/releases/download/v0.135.0/helmfile_linux_amd64
+          chmod +x helmfile_linux_amd64
+          sudo mv helmfile_linux_amd64 /usr/local/bin/helmfile
+          helmfile --version
+
+      - name: Install Helm-diff plugin
+        run: |
+          helm plugin install https://github.com/databus23/helm-diff
+          helm plugin list
+
+      - name: Deploy with Helmfile
+        run: |
+          # kubectl delete deploy appointment-service patient-service --wait=true
+          # kubectl delete svc appointment-service patient-service --wait=true
+          helmfile -f Deployment/helmfile.yaml sync
+          sleep 60
+          kubectl get pods
+          kubectl get svc
+
   
