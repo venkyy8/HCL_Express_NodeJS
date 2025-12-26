@@ -46,7 +46,10 @@ jobs:
 
       - name: Deploy with Helmfile
         run: |
-          helmfile -f Deployment/helmfile.yaml apply
+          # kubectl delete deploy appointment-service patient-service --wait=true
+          # kubectl delete svc appointment-service patient-service --wait=true
+          helmfile -f Deployment/helmfile.yaml sync
           sleep 60
           kubectl get pods
           kubectl get svc
+
