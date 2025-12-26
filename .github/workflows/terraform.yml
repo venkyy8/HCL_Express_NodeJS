@@ -6,6 +6,8 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    env:
+      TERRAFORM_WORKDIR: ./Terraform  # Set your Terraform directory here
 
     steps:
     - name: Checkout repo
@@ -22,13 +24,10 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Terraform Init
-      working-directory: ./terraform
-      run: terraform init
+      run: terraform init $TERRAFORM_WORKDIR
 
     - name: Terraform Plan
-      working-directory: ./terraform
-      run: terraform plan -out=tfplan
+      run: terraform plan -out=tfplan $TERRAFORM_WORKDIR
 
     - name: Terraform Apply
-      working-directory: ./terraform
-      run: terraform apply -auto-approve tfplan
+      run: terraform apply -auto-approve $TERRAFORM_WORKDIR/tfplan
