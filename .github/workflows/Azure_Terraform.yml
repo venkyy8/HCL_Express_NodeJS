@@ -29,13 +29,13 @@ jobs:
         echo "ARM_TENANT_ID=$(jq -r .tenantId <<< '${{ secrets.AZURE_CREDENTIALS }}')" >> $GITHUB_ENV
 
     - name: Terraform Init
-      working-directory: Terraform
+      working-directory: Terraform/Azure
       run: terraform init
 
     - name: Terraform Plan
-      working-directory: Terraform
+      working-directory: Terraform/Azure
       run: terraform plan -out=tfplan
 
     - name: Terraform Apply
-      working-directory: Terraform
+      working-directory: Terraform/Azure
       run: terraform apply -auto-approve tfplan
