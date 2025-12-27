@@ -5,21 +5,21 @@ on:
   #   branches: [ "main" ]
   workflow_dispatch:
   #
-  # workflow_run:
-  #   workflows: ["Terraform AKS"]
-  #   types:
-  #     - completed
+  workflow_run:
+    workflows: ["Terraform EKS"]
+    types:
+      - completed
 
 jobs:
-  # gate:
-  #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - run: echo "Terraform AKS succeeded. Proceeding..."
+  gate:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Terraform AKS succeeded. Proceeding..."
       
   OWASP-Dependency-scan:
     runs-on: ubuntu-latest
-    #needs: gate
+    needs: gate
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -161,7 +161,7 @@ jobs:
       - name: Set EKS Context
         run: |
           aws eks update-kubeconfig \
-            --region us-east-1 \
+            --region ap-south-1 \
             --name eks-demo-cluster
           kubectl get nodes
   
@@ -198,5 +198,9 @@ jobs:
         run: |
           helmfile -f Deployment/helmfile.yaml sync
           sleep 60
+          echo "list deployments"
+          kubectl get deployments
+          echo "list pods"
           kubectl get pods
+          echo "list services"
           kubectl get svc
