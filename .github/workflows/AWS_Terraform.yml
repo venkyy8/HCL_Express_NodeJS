@@ -26,15 +26,15 @@ jobs:
 
     # Terraform Init
     - name: Terraform Init
-      working-directory: Terraform
+      working-directory: Terraform/AWS
       run: terraform init
 
     # Terraform Plan
     - name: Terraform Plan
-      working-directory: Terraform
+      working-directory: Terraform/AWS
       run: terraform plan -out=tfplan
 
     # Terraform Apply
     - name: Terraform Apply
-      working-directory: Terraform
+      working-directory: Terraform/AWS
       run: terraform apply -auto-approve tfplan
