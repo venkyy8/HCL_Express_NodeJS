@@ -1,7 +1,6 @@
 # Use Node.js runtime image
 FROM node:20-alpine
 
-
 # Set working directory
 WORKDIR /app
 
@@ -17,3 +16,5 @@ EXPOSE 3001
 
 # Command to run your microservice
 CMD ["node", "appointment-service.js"]
+
+
